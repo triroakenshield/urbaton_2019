@@ -22,26 +22,40 @@ and open the template in the editor.
             integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
             crossorigin="">
         </script>
+        
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     </head>
     <body>
         <div class="main" align="center">
-            <div class="header">Заголовок</div>
+            <div class="header">
+                <p>MyEvent</p>
+                <p>Мероприятия, события, мастер-классы</p>
+            </div>
             <div class="row">
-                <div class="filter">Фильтры</div>
-                <div class="map">Карта
+                <div class="filter">
+                    <h1>Фильтры</h1>
+                    <form method="post" action="input5.php">
+                     <p><b>Категории</b></p>
+                     <p align="left" class="filter-fields">
+                       <input type="checkbox" name="category[]" value="excursion" checked>Экскурсии<Br>
+                       <input type="checkbox" name="category[]" value="master_class" checked>Мастер-классы<Br>
+                       <input type="checkbox" name="category[]" value="festival" checked>Фестивали<Br> 
+                     </p>
+                     <p><b>Даты</b></p>
+                       <input type="text" name="daterange" value="05/19/2019 - 05/25/2019" />
+                     <p><input type="submit" value="Отправить" onclick="get_data();"></p>
+                    </form>
+                </div>
+                <div class="map">
+                    <h1>Карта</h1>
                     <div id="mapid"></div>
                 </div>
-                <div class="tab">Мероприятия</div>
+                <div class="tab">
+                    <h1>Мероприятия</h1>
+                </div>
             </div>
         </div>
-        <?php
-          try {
-            $db_connection = mysqli_connect("127.0.0.1", "postgres", "test", "events_db");
-            //echo 'connected';
-          }
-          catch(Exception $ex) {
-              //echo $ex->getMessage();
-          }
-        ?>
     </body>
 </html>
