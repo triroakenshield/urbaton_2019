@@ -54,6 +54,7 @@ function prepare_data() {
     
     coords = mymap.getCenter();
     coords = [coords.lat, coords.lng];
+    console.log( coords );
     last_coords = coords;
 }
 
@@ -65,21 +66,38 @@ function get_data() {
             dataType: 'json',
             data: { categories: categories
                   , dates: dates
-                  , position:coords
+                  , position_x:coords.lat
+                  , position_y:coords.lng
               }
         })
       .done(function(msg) {
         // обработка пришедших данных
         if (msg.result = "ok") {
             //mymap.clearLayers();
+            alert('!!!');
+            //alert(msg.data);
             msg = JSON.parse(msg);
-            alert(msg.data);
-            //.foreach(function(item, i, msg) {
-            //    alert( i + ": " + item + " (массив:" + msg + ")" );
-            //});
+            //alert(msg);
+            data = msg.data;
+            var count = 0;
+            data.forEach(function(item, i, data) {
+                descr = item.descr;
+                latitude = item.latitude;
+                longitude = item.longitude;
+                url = item.url;
+                var marker = L.marker([latitude, longitude]).addTo(mymap);
+                marker.bindPopup(descr + "<br>" + url).openPopup();
+                count++;
+            });
+            alert(count);
+            // очистим таб
+            $('#tab_id').html('');
             alert("ok");
         }
         else
             alert("error");
       })
+      .fail(function (jqXHR, exception) {
+          alert(exception);
+      });
 }

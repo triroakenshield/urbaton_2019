@@ -7,35 +7,49 @@
  */
 
     $categories = !empty($_POST['categories']) ? $_POST['categories'] : '';
-    $dates = !empty($_POST['dates']) ? $_POST['dates'] : '';
-    $position = !empty($_POST['position']) ? $_POST['position'] : '';
+    $dates = !empty($_POST['dates']) ? $_POST['dates'] : '05/19/2019 - 05/25/2019';
+    $position_x = !empty($_POST['position_x']) ? $_POST['position_x'] : '56.838011';
+    $position_y = !empty($_POST['position_y']) ? $_POST['position_y'] : '60.597465';
     
+    $dates = explode(' - ', $dates);
     // стартовая позиция
     //$position = [56.838011, 60.597465];
+    $point = "POINT($position_x, $position_y)";
     
     try {
       $db_connection = mysqli_connect("127.0.0.1", "postgres", "test", "events_db");
+      $db_connection->set_charset("utf8");
       //echo 'connected';
       $req_str = "SELECT e.descr "
-                . "     ,e.coords "
+                . "     ,ST_X(e.coords) as latitude "
+                . "     ,ST_y(e.coords) as longitude "
                 . "     ,e.url "
                 //. "     ,e.start_date"
                 //. "     ,e.end_date"
-                . "FROM events e ";
-                /*. "WHERE categories in () "
-                 . " and e.end_date >= " . dates[0]
-                 . " and <=" . dates[1]
-                 . " and distance < 0.05";*/
+                . "FROM events e "
+                . "WHERE e.end_date >= UNIX_TIMESTAMP(STR_TO_DATE('" . $dates[0] . "','%m/%d/%Y'))"
+                 . " and e.start_date <= UNIX_TIMESTAMP(STR_TO_DATE('" . $dates[1] . "','%m/%d/%Y'))"
+                 . " and ST_Distance(e.coords, $point) < 0.05";
+                // . " and categories in () ";
+      //echo $req_str;
+      //exit;
       $result = mysqli_query($db_connection,$req_str);
-      /*$row=mysql_fetch_array($result);
-      
-      $desc = array(); $views = array();
-        while($row = mysql_fetch_array($result)) {
-                $desc[] = $row["video_desc"]; // or smth like $row["video_title"] for title
-                $views[] = $row["video_views"];
+      $str = '[';
+      while ($row = $result->fetch_object()){
+        if (strlen($str) > 5 ) {
+            $str = $str .',';
         }
-        $res = array($desc, $views);*/
-        //echo json_encode($result);
+        $str = $str . json_encode($row);
+        /*$str = $str . '{"descr":"' . $row->descr .'"';
+        $str = $str . '"latitude":"' . $row->latitude .'"';
+        $str = $str . '"longitude":"' . $row->longitude .'"';
+        $str = $str . '"url":"' . $row->url .'"}';
+        $i++;
+        echo '<br>res';*/
+      }
+      $str = $str .']';
+      //echo $str;
+      echo json_encode('{"result":"ok","data":' .$str.'}');
       
       mysqli_free_result($result);
       
@@ -44,4 +58,7 @@
     catch(Exception $ex) {
         echo json_encode('{result:"error"}');
     }
-    echo json_encode('{"result":"ok","data":"' . $req_str. '"}');
+    
+    //echo json_encode('{"result":"ok","data":"' . $req_str. '"}');
+
+?>

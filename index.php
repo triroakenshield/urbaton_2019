@@ -54,6 +54,7 @@ and open the template in the editor.
                 </div>
                 <div class="tab">
                     <h1>Мероприятия</h1>
+                    <div id="tab_id"></div>
                 </div>
             </div>
         </div>

@@ -1,0 +1,11 @@
+CREATE TABLE events
+(
+    id integer NOT NULL auto_increment,
+    out_id integer,
+    descr text,
+    coords point,
+    url text,
+    start_date timestamp,
+    end_date timestamp,
+    CONSTRAINT events_pkey PRIMARY KEY (id)
+);
