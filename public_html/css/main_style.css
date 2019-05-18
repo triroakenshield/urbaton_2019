@@ -8,3 +8,23 @@ and open the template in the editor.
     Author     : Денис
 */
 
+.main{
+    background-image: url(images/background_city.jpg);
+    
+}
+
+.header{
+    
+}
+
+.filter {
+    width: 20%;
+}
+
+.map {
+    width: 40%;
+}
+
+.tab {
+    width: 20%;
+}

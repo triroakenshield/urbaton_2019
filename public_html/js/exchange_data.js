@@ -4,4 +4,6 @@
  * and open the template in the editor.
  */
 
-alert("Javacript подключен");
+$( document ).ready(function() {
+    console.log( "ready!" );
+});
