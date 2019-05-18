@@ -44,7 +44,7 @@ and open the template in the editor.
                        <input type="checkbox" name="category[]" value="festival" checked>Фестивали<Br> 
                      </p>
                      <p><b>Даты</b></p>
-                       <input type="text" name="daterange" value="05/19/2019 - 05/25/2019" />
+                       <input type="text" name="daterange" value="05/18/2019 - 05/25/2019" />
                      <p><input type="submit" value="Отправить" onclick="get_data();"></p>
                     </form>
                 </div>

@@ -10,6 +10,9 @@ var objects;
 var categories;
 // filter event dates
 var dates;
+// current coords of map center
+var coords;
+var last_coords;
 
 // initialize map and get first data
 $( document ).ready(function() {
@@ -33,6 +36,9 @@ $( document ).ready(function() {
 });
 
 // get data from filters and prepare for ajax request
+// categories
+// dates
+// coords
 function prepare_data() {
     categories = [];
     jQuery("input[name='category[]']").each(function() {
@@ -41,10 +47,14 @@ function prepare_data() {
           categories.push(this.value);
     });
     
-    jQuery("input[name='dates']").each(function() {
+    jQuery("input[name='daterange']").each(function() {
         console.log( this.value );
         dates = this.value;
     });
+    
+    coords = mymap.getCenter();
+    coords = [coords.lat, coords.lng];
+    last_coords = coords;
 }
 
 // retrieve data from server
@@ -52,10 +62,24 @@ function get_data() {
     var jqxhr = $.ajax( {
             method: "POST",
             url: "server/server.php",
-            data: { name: "John", location: "Boston" }
+            dataType: 'json',
+            data: { categories: categories
+                  , dates: dates
+                  , position:coords
+              }
         })
       .done(function(msg) {
         // обработка пришедших данных
-        
+        if (msg.result = "ok") {
+            //mymap.clearLayers();
+            msg = JSON.parse(msg);
+            alert(msg.data);
+            //.foreach(function(item, i, msg) {
+            //    alert( i + ": " + item + " (массив:" + msg + ")" );
+            //});
+            alert("ok");
+        }
+        else
+            alert("error");
       })
 }
